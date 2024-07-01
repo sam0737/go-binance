@@ -2,9 +2,10 @@ package futures
 
 import (
 	"context"
-	"github.com/adshao/go-binance/v2/common"
 	"strconv"
 	"testing"
+
+	"github.com/adshao/go-binance/v2/common"
 
 	"github.com/stretchr/testify/suite"
 )
@@ -62,6 +63,7 @@ func (s *orderServiceTestSuite) TestCreateOrder() {
 	priceProtect := true
 	newOrderResponseType := NewOrderRespTypeRESULT
 	closePosition := false
+	priceMatch := "QUEUE"
 	s.assertReq(func(r *request) {
 		e := newSignedRequest().setFormParams(params{
 			"symbol":           symbol,
@@ -80,6 +82,7 @@ func (s *orderServiceTestSuite) TestCreateOrder() {
 			"priceProtect":     strconv.FormatBool(priceProtect),
 			"newOrderRespType": newOrderResponseType,
 			"closePosition":    strconv.FormatBool(closePosition),
+			"priceMatch":       priceMatch,
 		})
 		s.assertRequestEqual(e, r)
 	})
@@ -89,6 +92,7 @@ func (s *orderServiceTestSuite) TestCreateOrder() {
 		StopPrice(stopPrice).WorkingType(workingType).ActivationPrice(activationPrice).
 		CallbackRate(callbackRate).PositionSide(positionSide).
 		PriceProtect(priceProtect).NewOrderResponseType(newOrderResponseType).
+		PriceMatch(priceMatch).
 		Do(newContext())
 	s.r().NoError(err)
 	e := &CreateOrderResponse{
